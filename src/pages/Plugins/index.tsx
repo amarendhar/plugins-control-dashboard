@@ -1,13 +1,12 @@
 import styled from "styled-components";
 import { Loading, Error } from "components";
-import { usePlugins } from "./usePlugins";
 import { PluginItem } from "./PluginItem";
-import { STATUS } from "types";
+import { usePlugins } from "./usePlugins";
 
 export const Plugins = () => {
-  const { error, status, plugins, title } = usePlugins();
+  const { error, isLoading, plugins, title } = usePlugins();
 
-  if (status === STATUS.PENDING) {
+  if (isLoading) {
     return <Loading data-testid="plugins-loading" />;
   }
 
@@ -24,11 +23,11 @@ export const Plugins = () => {
             <PluginItem key={plugin.id} plugin={plugin} />
           ))}
         </PluginsList>
-      ) : (
+      ) : isLoading ? (
         <NoResults data-testid="plugins-not-found">
           No plugins available at the moment, please try again later
         </NoResults>
-      )}
+      ) : null}
     </PluginsContainer>
   );
 };
@@ -53,17 +52,9 @@ const PluginsContainer = styled.div`
 `;
 
 const Title = styled.h1`
-  text-align: center;
   padding: ${({ theme }) => theme.spacing(5)} 0;
+  font-size: 20px;
   font-weight: ${({ theme }) => theme.typography.fontWeightLight};
-
-  ${({ theme }) => theme.breakpoints.down("sm")} {
-    font-size: 24px;
-  }
-
-  ${({ theme }) => theme.breakpoints.down("xs")} {
-    font-size: 20px;
-  }
 `;
 
 const PluginsList = styled.div`

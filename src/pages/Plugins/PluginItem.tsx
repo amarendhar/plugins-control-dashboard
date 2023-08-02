@@ -1,4 +1,8 @@
-import styled, { keyframes } from "styled-components";
+import { useMemo, useCallback } from "react";
+import styled from "styled-components";
+import { useFetchPluginsQuery, useUpdatePluginMutation } from "store/api";
+import { Switch } from "components";
+import { Sizes } from "themes";
 import { PluginData, PluginStatus } from "types";
 
 type PluginItemProps = {
@@ -6,41 +10,66 @@ type PluginItemProps = {
 };
 
 export const PluginItem = ({ plugin }: PluginItemProps) => {
+  const [updatePlugin] = useUpdatePluginMutation();
+  const { refetch } = useFetchPluginsQuery();
+
+  const { isActive, isDisabled } = useMemo(() => {
+    return {
+      isActive: plugin.status.includes(PluginStatus.Active),
+      isDisabled: plugin.status.includes(PluginStatus.Disabled),
+    };
+  }, [plugin]);
+
+  const onChange = useCallback(
+    async (value: boolean) => {
+      const response = await updatePlugin({
+        pluginId: plugin.id,
+        data: {
+          tabId: plugin.tabId,
+          status: value ? PluginStatus.Active : PluginStatus.Inactive,
+        },
+      });
+
+      // @ts-ignore
+      if (response?.data?.success) {
+        refetch();
+      }
+    },
+    [plugin, refetch, updatePlugin]
+  );
+
   return (
-    <Container data-testid="plugin-item">
+    <Container data-testid="plugin-item" disabled={isDisabled}>
       <Details>
-        <div data-testid="plugin-title">{plugin.title}</div>
-        <div data-testid="plugin-description">{plugin.description}</div>
+        <Title data-testid="plugin-title">{plugin.title}</Title>
+        <Description data-testid="plugin-description">
+          {plugin.description}
+        </Description>
       </Details>
-      <Control>
-        <input
-          data-testid="plugin-control"
-          type="checkbox"
-          checked={plugin.status.includes(PluginStatus.Active)}
-          onChange={() => {}}
+      <div>
+        <Switch
+          size={Sizes.lg}
+          value={isActive}
+          disabled={isDisabled}
+          onChange={onChange}
+          activeText="Allowed"
+          inActiveText="Blocked"
         />
-      </Control>
+      </div>
     </Container>
   );
 };
 
-const fadeIn = keyframes`
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-`;
-
-const Container = styled.div`
+const Container = styled.div<{ disabled: boolean }>`
+  min-height: 200px;
   display: flex;
+  justify-content: space-between;
   padding: ${({ theme }) => theme.spacing(6)};
   border-radius: ${({ theme }) => theme.shape.borderRadiusMd};
   border: 2px solid ${({ theme }) => theme.palette.grey[300]};
   background-color: ${({ theme }) => theme.palette.primary.main};
-  animation: ${fadeIn} 0.2s ease-in;
   transition: all 0.2s ${({ theme }) => theme.transitions.easing.easeInOut} 0ms;
+  opacity: ${({ disabled }) => (disabled ? 0.5 : 1)};
   overflow: hidden;
 
   &:hover {
@@ -54,4 +83,10 @@ const Details = styled.div`
   grid-gap: ${({ theme }) => theme.spacing(6)};
 `;
 
-const Control = styled.div``;
+const Title = styled.h3`
+  font-weight: ${({ theme }) => theme.typography.fontWeightLight};
+`;
+
+const Description = styled.p`
+  color: ${({ theme }) => theme.palette.grey[500]};
+`;

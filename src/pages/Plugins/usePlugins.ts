@@ -1,34 +1,20 @@
-import { useMemo, useEffect } from "react";
+import { useMemo } from "react";
 import { useParams } from "react-router-dom";
-import { useAppSelector, useAppDispatch } from "store/hooks";
-import {
-  fetchPlugins,
-  selectPlugin,
-  PluginsState,
-} from "store/slices/pluginsSlice";
-import { PluginData, TabDataEntry } from "types";
+import { useFetchPluginsQuery } from "store/api";
 import { preparePlugins } from "utils";
+import { Maybe, TabDataEntry, PluginsDataEntry, PluginData } from "types";
 
 type UsePluginsReturnProps = {
-  data: PluginsState["data"];
-  error: PluginsState["error"];
-  status: PluginsState["status"];
+  data?: Maybe<PluginsDataEntry>;
+  error: string;
+  isLoading: boolean;
   plugins: PluginData[];
   title: string;
 };
 
 export const usePlugins = (): UsePluginsReturnProps => {
+  const { data, error, isLoading } = useFetchPluginsQuery();
   const { tabId } = useParams<{ tabId: string }>();
-  const dispatch = useAppDispatch();
-  const { status, error, data = null } = useAppSelector(selectPlugin);
-
-  useEffect(() => {
-    if (data) {
-      return;
-    }
-
-    dispatch(fetchPlugins());
-  }, [data, dispatch]);
 
   const { plugins, title } = useMemo(() => {
     const title = data?.tabdata?.[tabId as keyof TabDataEntry]?.title;
@@ -40,5 +26,5 @@ export const usePlugins = (): UsePluginsReturnProps => {
     };
   }, [data, tabId]);
 
-  return { data, error, status, plugins, title };
+  return { data, error: error ? String(error) : "", isLoading, plugins, title };
 };

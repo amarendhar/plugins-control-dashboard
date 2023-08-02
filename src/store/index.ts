@@ -5,16 +5,16 @@ import {
   configureStore,
 } from "@reduxjs/toolkit";
 import reduxLogger from "redux-logger";
-import pluginsReducer from "./slices/pluginsSlice";
+import { api } from "./api";
 import { ENV } from "types";
 
-const middlewares: Middleware[] = [];
+const middlewares: Middleware[] = [api.middleware];
 if (process.env.NODE_ENV === ENV.DEVELOPMENT) {
   middlewares.push(reduxLogger);
 }
 
 export const rootReducer = {
-  plugins: pluginsReducer,
+  [api.reducerPath]: api.reducer,
 };
 
 export const store = configureStore({

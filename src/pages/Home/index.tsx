@@ -1,11 +1,10 @@
 import { Loading, Error } from "components";
 import { useHome } from "./useHome";
-import { STATUS } from "types";
 
 export const Home = () => {
-  const { data, error, status } = useHome();
+  const { error, isLoading } = useHome();
 
-  if (status === STATUS.PENDING) {
+  if (isLoading) {
     return <Loading data-testid="plugins-loading" />;
   }
 
@@ -13,9 +12,5 @@ export const Home = () => {
     return <Error data-testid="plugins-error">{error}</Error>;
   }
 
-  return (
-    <div>
-      <div>Home</div>
-    </div>
-  );
+  return null;
 };

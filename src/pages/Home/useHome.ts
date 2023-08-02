@@ -1,27 +1,17 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAppSelector, useAppDispatch } from "store/hooks";
-import {
-  fetchPlugins,
-  selectPlugin,
-  PluginsState,
-} from "store/slices/pluginsSlice";
-import { TabDataEntry } from "types";
+import { useFetchPluginsQuery } from "store/api";
+import { Maybe, TabDataEntry, PluginsDataEntry } from "types";
 
-type UseHomeReturnProps = {
-  data: PluginsState["data"];
-  error: PluginsState["error"];
-  status: PluginsState["status"];
+type UseHomReturnProps = {
+  data?: Maybe<PluginsDataEntry>;
+  error: string;
+  isLoading: boolean;
 };
 
-export const useHome = (): UseHomeReturnProps => {
+export const useHome = (): UseHomReturnProps => {
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const { status, error, data = null } = useAppSelector(selectPlugin);
-
-  useEffect(() => {
-    dispatch(fetchPlugins());
-  }, [dispatch]);
+  const { data, error, isLoading } = useFetchPluginsQuery();
 
   useEffect(() => {
     const tabId = data?.tabs?.[0];
@@ -31,5 +21,5 @@ export const useHome = (): UseHomeReturnProps => {
     }
   }, [data, navigate]);
 
-  return { data, error, status };
+  return { data, error: error ? String(error) : "", isLoading };
 };

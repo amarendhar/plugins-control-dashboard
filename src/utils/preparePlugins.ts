@@ -1,8 +1,7 @@
-import { PluginsState } from "store/slices/pluginsSlice";
 import { PluginData, PluginStatus, TabDataEntry, PluginsEntry } from "types";
 
 type PreparePluginsProps = {
-  data: PluginsState["data"];
+  data: any;
   tabId?: string;
 };
 
@@ -32,6 +31,7 @@ export const preparePlugins = ({ data, tabId }: PreparePluginsProps) => {
 
   const enabledPlugins = [...activePlugins, ...inactivePlugins];
 
+  // @ts-ignore
   const disabledPlugins = disabledPluginIds.reduce((acc, disabledPluginId) => {
     const enabledPlugin = enabledPlugins.find(
       (enabledPlugin) => enabledPlugin.id === disabledPluginId
@@ -46,14 +46,16 @@ export const preparePlugins = ({ data, tabId }: PreparePluginsProps) => {
         ...plugin,
         id: disabledPluginId,
         status: [PluginStatus.Inactive, PluginStatus.Disabled],
-        parent: tabId,
+        tabId,
       });
     }
 
     return acc;
   }, [] as PluginData[]);
 
-  return [...activePlugins, ...inactivePlugins, ...disabledPlugins];
+  return [...activePlugins, ...inactivePlugins, ...disabledPlugins].sort(
+    (a, b) => a.title.localeCompare(b.title)
+  );
 };
 
 type MapPluginsWithStatusProps = {
@@ -76,7 +78,7 @@ const mapPluginsWithStatus = ({
       ...plugin,
       id: pluginId,
       status: [status],
-      parent: tabId,
+      tabId,
     };
   });
 };
