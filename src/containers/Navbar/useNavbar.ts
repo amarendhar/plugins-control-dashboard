@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { useAppSelector } from "store/hooks";
 import { selectPlugin, PluginsState } from "store/slices/pluginsSlice";
 
-type Tab = Record<"title" | "icon", string>;
+type Tab = Record<"id" | "title" | "icon", string>;
 
 type UseNavbarReturnProps = {
   navItems: Tab[];
@@ -18,11 +18,12 @@ export const useNavbar = (): UseNavbarReturnProps => {
       return [];
     }
 
-    return data.tabs.reduce((acc, tabName) => {
-      const tab = data.tabdata[tabName as keyof typeof data.tabdata];
+    return data.tabs.reduce((acc, tabId) => {
+      const tab = data.tabdata[tabId as keyof typeof data.tabdata];
 
       if (tab) {
         acc.push({
+          id: tabId,
           title: tab.title,
           icon: tab.icon,
         });

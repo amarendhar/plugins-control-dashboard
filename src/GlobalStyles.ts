@@ -32,7 +32,6 @@ export const GlobalStyles = createGlobalStyle`
   #root {
     position: relative;
     display: flex;
-    flex-direction: column;
   }
 
   button {
@@ -61,5 +60,12 @@ export const GlobalStyles = createGlobalStyle`
 
   h4 {
     font-size: 16px;
+  }
+
+  ul,
+  li {
+    margin: 0;
+    padding: 0;
+    list-style: none;
   }
 `;

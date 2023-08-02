@@ -1,16 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { AppState } from "store";
 import { PLUGINS_BASE_URL } from "globalConstants";
-import { Maybe, STATUS } from "types";
-import mockPlugins from "mocks/__fixtures__/mockPlugins.json";
-
-export type TabsEntry = typeof mockPlugins.data.tabs;
-export type TabDataEntry = typeof mockPlugins.data.tabdata;
-export type PluginsEntry = typeof mockPlugins.data.plugins;
-export type PluginEntry = typeof mockPlugins.data.plugins.plugin1;
+import { Maybe, STATUS, dataEntry } from "types";
 
 export type PluginsState = {
-  data: Maybe<typeof mockPlugins.data>;
+  data: Maybe<dataEntry>;
   error: Maybe<string | undefined>;
   status: STATUS;
 };
