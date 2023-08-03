@@ -14,7 +14,9 @@ type UseNavbarReturnProps = {
 };
 
 export const useNavbar = (): UseNavbarReturnProps => {
-  const [updatePlugins, { isLoading }] = useUpdatePluginsMutation();
+  const [updatePlugins, { isLoading }] = useUpdatePluginsMutation({
+    fixedCacheKey: "shared-update-plugins",
+  });
   const { data, refetch } = useFetchPluginsQuery();
 
   const { navItems, isAllEnabled } = useMemo(() => {

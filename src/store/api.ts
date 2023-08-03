@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createSelector } from "@reduxjs/toolkit";
 import { PLUGINS_BASE_URL } from "globalConstants";
 import { PluginStatus, PluginsDataEntry } from "types";
 
@@ -43,3 +44,24 @@ export const {
   useUpdatePluginMutation,
   useUpdatePluginsMutation,
 } = api;
+
+export const selectPlugins = createSelector(
+  api.endpoints.fetchPlugins.select(undefined),
+  (result) => result
+);
+
+export const selectUpdatePlugin = createSelector(
+  api.endpoints.updatePlugin.select({
+    requestId: undefined,
+    fixedCacheKey: undefined,
+  }),
+  (result) => result
+);
+
+export const selectUpdatePlugins = createSelector(
+  api.endpoints.updatePlugins.select({
+    requestId: undefined,
+    fixedCacheKey: "shared-update-plugins",
+  }),
+  (result) => result
+);

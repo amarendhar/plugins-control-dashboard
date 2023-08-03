@@ -1,10 +1,11 @@
 import styled from "styled-components";
-import { Loading, Error } from "components";
+import { Error, Loading } from "components";
 import { PluginItem } from "./PluginItem";
 import { usePlugins } from "./usePlugins";
 
 export const Plugins = () => {
-  const { error, isLoading, plugins, title } = usePlugins();
+  const { error, isLoading, isUpdatePluginsLoading, plugins, title } =
+    usePlugins();
 
   if (isLoading) {
     return <Loading data-testid="plugins-loading" />;
@@ -18,10 +19,16 @@ export const Plugins = () => {
     <PluginsContainer data-testid="plugins-container">
       <Title data-testid="plugins-title">{title}</Title>
       {plugins.length > 0 ? (
-        <PluginsList data-testid="plugins-list">
+        <PluginsList
+          data-testid="plugins-list"
+          disabled={isUpdatePluginsLoading}
+        >
           {plugins.map((plugin) => (
             <PluginItem key={plugin.id} plugin={plugin} />
           ))}
+          {isUpdatePluginsLoading && (
+            <LoadingStyled data-testid="plugin-status-loading" />
+          )}
         </PluginsList>
       ) : isLoading ? (
         <NoResults data-testid="plugins-not-found">
@@ -57,11 +64,13 @@ const Title = styled.h1`
   font-weight: ${({ theme }) => theme.typography.fontWeightLight};
 `;
 
-const PluginsList = styled.div`
+const PluginsList = styled.div<{ disabled: boolean }>`
+  position: relative;
   display: grid;
   grid-gap: 24px;
   grid-template-columns: repeat(1, minmax(0, 1fr));
   padding: ${({ theme }) => theme.spacing(4)} 0;
+  opacity: ${({ disabled }) => (disabled ? 0.5 : 1)};
 
   ${({ theme }) => theme.breakpoints.up("sm")} {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -80,4 +89,9 @@ const NoResults = styled.h1`
   text-align: center;
   padding: ${({ theme }) => theme.spacing(3)} 0;
   font-weight: ${({ theme }) => theme.typography.fontWeightRegular};
+`;
+
+const LoadingStyled = styled(Loading)`
+  position: absolute;
+  inset: 0;
 `;
