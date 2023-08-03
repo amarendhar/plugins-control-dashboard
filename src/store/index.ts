@@ -10,7 +10,7 @@ import { ENV } from "types";
 
 const middlewares: Middleware[] = [api.middleware];
 if (process.env.NODE_ENV === ENV.DEVELOPMENT) {
-  middlewares.push(reduxLogger);
+  // middlewares.push(reduxLogger);
 }
 
 export const rootReducer = {

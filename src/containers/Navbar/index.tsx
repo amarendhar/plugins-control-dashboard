@@ -8,7 +8,7 @@ import { useNavbar } from "./useNavbar";
 
 export const Navbar = () => {
   const theme = useTheme();
-  const { navItems, isAllEnabled, onChange } = useNavbar();
+  const { isLoading, navItems, isAllEnabled, onChange } = useNavbar();
 
   return (
     <Nav>
@@ -33,6 +33,7 @@ export const Navbar = () => {
           onChange={onChange}
           activeText={<SwitchLabel>All plugins enabled</SwitchLabel>}
           inActiveText={<SwitchLabel>All plugins disabled</SwitchLabel>}
+          disabled={isLoading}
           icon={
             <FontAwesomeIcon
               icon={faPowerOff}

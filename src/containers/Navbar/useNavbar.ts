@@ -1,7 +1,7 @@
 import { useMemo, useCallback } from "react";
 import { useFetchPluginsQuery, useUpdatePluginsMutation } from "store/api";
 import { isEqual } from "lodash";
-import { uniqueBy } from "utils";
+import { uniqueBy, toastError, toastSuccess } from "utils";
 import { PluginStatus } from "types";
 
 type Tab = Record<"id" | "title" | "icon", string>;
@@ -14,8 +14,8 @@ type UseNavbarReturnProps = {
 };
 
 export const useNavbar = (): UseNavbarReturnProps => {
-  const [updatePlugins] = useUpdatePluginsMutation();
-  const { data, isLoading, refetch } = useFetchPluginsQuery();
+  const [updatePlugins, { isLoading }] = useUpdatePluginsMutation();
+  const { data, refetch } = useFetchPluginsQuery();
 
   const { navItems, isAllEnabled } = useMemo(() => {
     if (!data?.tabs || !data?.tabdata) {
@@ -61,9 +61,10 @@ export const useNavbar = (): UseNavbarReturnProps => {
       });
 
       // @ts-ignore
-      if (response?.data?.success) {
-        refetch();
-      }
+      response?.data?.success
+        ? toastSuccess("Plugins status updated successfully")
+        : toastError("Failed to update plugins status, please try again");
+      refetch();
     },
     [refetch, updatePlugins]
   );

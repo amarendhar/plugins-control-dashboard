@@ -2,6 +2,7 @@ import { useMemo, useCallback } from "react";
 import styled from "styled-components";
 import { useFetchPluginsQuery, useUpdatePluginMutation } from "store/api";
 import { Switch } from "components";
+import { toastError, toastSuccess } from "utils";
 import { PluginData, PluginStatus } from "types";
 
 type PluginItemProps = {
@@ -9,7 +10,7 @@ type PluginItemProps = {
 };
 
 export const PluginItem = ({ plugin }: PluginItemProps) => {
-  const [updatePlugin] = useUpdatePluginMutation();
+  const [updatePlugin, { isLoading }] = useUpdatePluginMutation();
   const { refetch } = useFetchPluginsQuery();
 
   const { isActive, isDisabled } = useMemo(() => {
@@ -30,9 +31,10 @@ export const PluginItem = ({ plugin }: PluginItemProps) => {
       });
 
       // @ts-ignore
-      if (response?.data?.success) {
-        refetch();
-      }
+      response?.data?.success
+        ? toastSuccess("Plugin status updated successfully")
+        : toastError("Failed to update plugin status, please try again");
+      refetch();
     },
     [plugin, refetch, updatePlugin]
   );
@@ -48,7 +50,7 @@ export const PluginItem = ({ plugin }: PluginItemProps) => {
       <div>
         <Switch
           value={isActive}
-          disabled={isDisabled}
+          disabled={isDisabled || isLoading}
           onChange={onChange}
           activeText="Allowed"
           inActiveText="Blocked"

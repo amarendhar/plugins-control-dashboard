@@ -14,6 +14,7 @@ export const handlers = [
   rest.post(`${PLUGINS_BASE_URL}/plugins/:pluginId`, async (req, res, ctx) => {
     const pluginId = req.params.pluginId as string;
     const { tabId, status } = await req.json();
+    
     if (!pluginId || !tabId || !status) {
       return res(
         ctx.status(400),

@@ -86,6 +86,7 @@ const Label = styled.label<{ disabled: boolean }>`
   flex-direction: column;
   align-items: center;
   grid-gap: ${({ theme }) => theme.spacing(1)};
+  opacity: ${({ disabled }) => (disabled ? 0.5 : 1)};
 
   cursor: pointer;
   ${(props) => (props.disabled ? "pointer-events: none" : "")};
