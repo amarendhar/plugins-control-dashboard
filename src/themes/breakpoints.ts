@@ -1,4 +1,5 @@
 const breakPointValues = {
+  xs: 575,
   sm: 768,
   md: 1024,
   lg: 1200,

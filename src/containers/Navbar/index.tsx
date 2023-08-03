@@ -1,10 +1,13 @@
 import { NavLink } from "react-router-dom";
-import styled from "styled-components";
+import styled, { useTheme } from "styled-components";
+import { faPowerOff } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Icons, Switch } from "components";
 import { Sizes } from "themes";
 import { useNavbar } from "./useNavbar";
 
 export const Navbar = () => {
+  const theme = useTheme();
   const { navItems, isAllEnabled, onChange } = useNavbar();
 
   return (
@@ -30,6 +33,12 @@ export const Navbar = () => {
           onChange={onChange}
           activeText={<SwitchLabel>All plugins enabled</SwitchLabel>}
           inActiveText={<SwitchLabel>All plugins disabled</SwitchLabel>}
+          icon={
+            <FontAwesomeIcon
+              icon={faPowerOff}
+              color={theme.palette[isAllEnabled ? "success" : "error"].main}
+            />
+          }
         />
       </Control>
     </Nav>
@@ -38,11 +47,15 @@ export const Navbar = () => {
 
 const Nav = styled.nav`
   width: 100%;
-  max-width: 300px;
+  max-width: min-content;
   display: flex;
   flex-direction: column;
   background-color: ${({ theme }) => theme.palette.navbar.background};
   border-right: 1px solid ${({ theme }) => theme.palette.grey[300]};
+
+  ${({ theme }) => theme.breakpoints.up("xs")} {
+    max-width: 300px;
+  }
 `;
 
 const BrandLogo = styled(NavLink)`
@@ -86,11 +99,16 @@ const NavLinkStyled = styled(NavLink)`
     border-color: #c62f40;
     background-color: ${({ theme }) => theme.palette.navbar.link.light};
   }
+
+  svg {
+    font-size: 20px;
+  }
 `;
 
 const Control = styled.div<{ $isAllEnabled: boolean }>`
   padding: ${({ theme }) => theme.spacing(5)};
   padding-bottom: ${({ theme }) => theme.spacing(8)};
+  transition: all 0.2s ease-in-out;
   background: linear-gradient(
     to top,
     ${({ $isAllEnabled, theme }) =>
@@ -102,10 +120,15 @@ const Control = styled.div<{ $isAllEnabled: boolean }>`
 `;
 
 const SwitchStyled = styled(Switch)`
-  flex-direction: row-reverse;
-  justify-content: space-evenly;
+  /* flex-direction: row-reverse; */
+  text-align: center;
   justify-content: space-between;
   padding: 0 ${({ theme }) => theme.spacing(5)};
+
+  ${({ theme }) => theme.breakpoints.up("xs")} {
+    text-align: left;
+    flex-direction: row-reverse;
+  }
 `;
 
 const SwitchLabel = styled.span`

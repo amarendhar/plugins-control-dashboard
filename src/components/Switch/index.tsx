@@ -17,6 +17,7 @@ type SwitchProps = {
   activeText?: React.ReactNode;
   inActiveText?: React.ReactNode;
   onChange?: (value: boolean) => void;
+  icon?: React.ReactNode;
 };
 
 export const Switch = ({
@@ -27,6 +28,7 @@ export const Switch = ({
   activeText,
   inActiveText,
   onChange = () => {},
+  icon,
   ...restProps
 }: SwitchProps) => {
   const [selectedValue, setSelectedValue] = useState(value);
@@ -65,7 +67,9 @@ export const Switch = ({
         disabled={disabled}
       />
       <SwitchTrack size={size} checked={selectedValue}>
-        <SwitchThumb size={size} checked={selectedValue} />
+        <SwitchThumb size={size} checked={selectedValue}>
+          {icon && icon}
+        </SwitchThumb>
       </SwitchTrack>
       {hasText && (
         <Text checked={selectedValue}>
@@ -92,14 +96,15 @@ const Label = styled.label<{ disabled: boolean }>`
 `;
 
 const SwitchTrack = styled.span<{ size: Sizes; checked: boolean }>`
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   border-radius: 34px;
   z-index: 1;
   transition: background-color 0.4s, border 0.4s;
 
-  width: ${({ size }) => (size === "lg" ? 42 : 30)}px;
-  height: ${({ size }) => (size === "lg" ? 23 : 18)}px;
+  width: ${({ size }) => (size === "md" ? 42 : 50)}px;
+  height: ${({ size }) => (size === "md" ? 23 : 30)}px;
   background-color: ${({ theme, checked }) =>
     checked ? theme.palette.success.main : theme.palette.error.main};
   border: 1px solid
@@ -146,19 +151,22 @@ const Input = styled.input<{ checked: boolean }>`
 `;
 
 const SwitchThumb = styled.span<{ size: Sizes; checked: boolean }>`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   box-sizing: border-box;
   border-radius: 50%;
   border: 1px solid white;
   background-color: white;
   transition: 0.4s;
 
-  width: ${({ size }) => (size === "lg" ? "17" : "12")}px;
-  height: ${({ size }) => (size === "lg" ? "17" : "12")}px;
+  width: ${({ size }) => (size === "md" ? "17" : "22")}px;
+  height: ${({ size }) => (size === "md" ? "17" : "22")}px;
   transform: ${({ checked, size }) =>
     checked
-      ? size === "lg"
+      ? size === "md"
         ? "translateX(21px)"
-        : "translateX(14px)"
+        : "translateX(24px)"
       : "translateX(2px)"};
 `;
 

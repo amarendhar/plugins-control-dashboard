@@ -48,7 +48,6 @@ export const PluginItem = ({ plugin }: PluginItemProps) => {
       </Details>
       <div>
         <Switch
-          size={Sizes.lg}
           value={isActive}
           disabled={isDisabled}
           onChange={onChange}

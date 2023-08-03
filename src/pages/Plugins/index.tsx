@@ -52,7 +52,7 @@ const PluginsContainer = styled.div`
 `;
 
 const Title = styled.h1`
-  padding: ${({ theme }) => theme.spacing(5)} 0;
+  padding: ${({ theme }) => theme.spacing(3)} 0;
   font-size: 20px;
   font-weight: ${({ theme }) => theme.typography.fontWeightLight};
 `;

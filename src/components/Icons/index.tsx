@@ -25,7 +25,7 @@ export const Icons = ({ title }: IconsProps) => {
     case ["finance"].includes(name):
       icon = faCoins;
       break;
-    case ["personal, user"].includes(name):
+    case ["personnel", "user"].includes(name):
       icon = faUser;
       break;
     default:
