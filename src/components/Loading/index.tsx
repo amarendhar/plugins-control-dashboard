@@ -10,6 +10,7 @@ export const Loading = ({ size, ...restProps }: LoadingProps) => {
     <Container
       data-testid={restProps["data-testid"] || "loading"}
       $size={size || 5}
+      {...restProps}
     >
       <Loader />
     </Container>

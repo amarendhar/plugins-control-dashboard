@@ -1,7 +1,7 @@
 import { useMemo, useCallback } from "react";
 import styled from "styled-components";
 import { useFetchPluginsQuery, useUpdatePluginMutation } from "store/api";
-import { Switch } from "components";
+import { Switch, Loading } from "components";
 import { toastError, toastSuccess } from "utils";
 import { PluginData, PluginStatus } from "types";
 
@@ -16,9 +16,9 @@ export const PluginItem = ({ plugin }: PluginItemProps) => {
   const { isActive, isDisabled } = useMemo(() => {
     return {
       isActive: plugin.status.includes(PluginStatus.Active),
-      isDisabled: plugin.status.includes(PluginStatus.Disabled),
+      isDisabled: plugin.status.includes(PluginStatus.Disabled) || isLoading,
     };
-  }, [plugin]);
+  }, [plugin, isLoading]);
 
   const onChange = useCallback(
     async (value: boolean) => {
@@ -50,17 +50,19 @@ export const PluginItem = ({ plugin }: PluginItemProps) => {
       <div>
         <Switch
           value={isActive}
-          disabled={isDisabled || isLoading}
+          disabled={isDisabled}
           onChange={onChange}
           activeText="Allowed"
           inActiveText="Blocked"
         />
       </div>
+      {isLoading && <LoadingStyled data-testid="plugin-status-loading" />}
     </Container>
   );
 };
 
 const Container = styled.div<{ disabled: boolean }>`
+  position: relative;
   min-height: 200px;
   display: flex;
   justify-content: space-between;
@@ -89,4 +91,9 @@ const Title = styled.h3`
 
 const Description = styled.p`
   color: ${({ theme }) => theme.palette.grey[500]};
+`;
+
+const LoadingStyled = styled(Loading)`
+  position: absolute;
+  inset: 0;
 `;
