@@ -2,7 +2,6 @@ import { useMemo, useCallback } from "react";
 import styled from "styled-components";
 import { useFetchPluginsQuery, useUpdatePluginMutation } from "store/api";
 import { Switch } from "components";
-import { Sizes } from "themes";
 import { PluginData, PluginStatus } from "types";
 
 type PluginItemProps = {
