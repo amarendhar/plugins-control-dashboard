@@ -1,4 +1,4 @@
-# Getting Started with Create React App
+# Plugins Control Dashboard
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
@@ -49,11 +49,31 @@ To analyze TypeScript code for type errors
 - Created `styled.d.ts` file to access intellisense of them when using in the styled-components.
 - All global-styles are given at `src/globalStyles.ts`
 
+## Mock APIs
+  - **GET https://plugins.dataguard.com/plugins**
+    - To fetch all the tabs and plugins data.
+  - **POST https://plugins.dataguard.com/plugins/:pluginId**
+    - To update the status of an individual plugin.
+    - req.params
+      - `pluginId`
+    - req.body
+      - `{ tabId, status }`
+  - **POST https://plugins.dataguard.com/plugins**
+    - To update the status of all the plugins in all the tabs
+    - req.body
+      - `{ status }`
+
 ### npm packages
 
-- [msw (mock-service-worker)](https://mswjs.io/docs/getting-started/mocks/rest-api) for mocking APIs.
-  - The mock-server, mock-API-handlers, and mock-fixtures are available in `src/mocks` folder
+- [msw (mock-service-worker)](https://mswjs.io/docs/getting-started/mocks/rest-api)
+  - For mocking APIs.
+  - The mock-server, mock-API-handlers, and mock-fixtures are available in `src/mocks` folder.
+- [react-toastify](https://github.com/fkhadra/react-toastify)
+  - For showing the status of APIs success & failure.
+- [RTK Query](https://github.com/reduxjs/redux-toolkit)
+  - RTK Query is a powerful data fetching and caching tool. It is designed to simplify common cases for loading data in a web application, eliminating the need to hand-write data fetching & caching logic yourself.
 
 ### Notes
 
-- Due to time constraints, couldn't add the test-cases.
+- Due to the time constraints, couldn't add the test-cases.
+- Due to the time constraints, couldn't focus much on optimizing the Mock-APIs logic
